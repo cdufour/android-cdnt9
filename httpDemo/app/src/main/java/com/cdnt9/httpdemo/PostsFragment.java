@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,14 @@ public class PostsFragment extends Fragment {
 
     public PostsFragment() {
         // Required empty public constructor
+        // Retrofit configuration
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        // Association entre retrofit et l'interface
+        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
     }
 
     /**
@@ -59,25 +68,8 @@ public class PostsFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-        // Cannot use direct findById here (not an activity)
-        // Retrofit configuration
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        // Association entre retrofit et l'interface
-        jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
+    private void listPosts() {
         // Request to server
-        // objet Call
         Call<List<Post>> call = jsonPlaceHolderApi.getPosts();
 
         call.enqueue(new Callback<List<Post>>() {
@@ -97,6 +89,36 @@ public class PostsFragment extends Fragment {
 
             }
         });
+    }
+
+    private void addPost() {
+        Post post = new Post(1, "Article formidable", "Java est bien plus verbeux que JS");
+        Call<Post> call = jsonPlaceHolderApi.createPost(post);
+
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                Log.i("Http Request", Integer.toString(response.code()));
+                textView.setText(response.body().getTitle() + " => " + response.body().getId());
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+        // Cannot use direct findById here (not an activity)
+        //listPosts();
+        addPost();
     }
 
     @Override
