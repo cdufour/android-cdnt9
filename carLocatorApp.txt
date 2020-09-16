@@ -1,0 +1,25 @@
+** Projet carLocatorApp**
+
+A plusieurs reprises, vous avez garé votre voiture sans vous rappeler précisément où. 
+Vous décidez alors de réaliser une application native Android permettant d'enregistrer des "marqueurs".
+Un marqueur associera un véhicule avec une date et des coordoonnées GPS.
+
+Exemple: en date du 15/08/2020 09h15, ma voiture se situe à 48.6080512, 7.752908799999999
+
+- Propriété d'un marqueur: nom du véhicule, date, coordonnées GPS
+
+L'application permettra
+- d'enregistrer des marqueurs grâce à une API (serveur distant)
+- de lister les marqueurs enregistrés
+
+Livrables attendus:
+- code source du prototype de l'application
+
+N.B: la classe android.location permet d'obtenir les coordonnées GPS du mobile
+
+
+Merci de me fournir l'adresse de votre dépôt github/gitlab sur teams dans le canal Android
+
+Bon courage !
+
+Chris
